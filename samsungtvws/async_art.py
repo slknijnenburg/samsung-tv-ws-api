@@ -399,9 +399,11 @@ class SamsungTVAsyncArt(SamsungTVWSAsyncConnection):
         return thumbnail_data_dict if as_dict else list(thumbnail_data_dict.values()) if len(content_id_list) > 1 else thumbnail_data
 
     async def upload(self, file, matte="shadowbox_polar", portrait_matte="shadowbox_polar", file_type="png", date=None, timeout=10):
-        '''
+        """
         NOTE: both id's and request_id have to be the same
-        '''
+        Returns the full `data` response from the TV, including `content_id`, `matte_id`, `portrait_matte_id`,
+            `width` and `height`.
+        """
         if isinstance(file, str):
             file_name, file_extension = os.path.splitext(file)
             file_type = file_extension[1:]
@@ -454,7 +456,7 @@ class SamsungTVAsyncArt(SamsungTVWSAsyncConnection):
         await writer.drain()
         writer.close()
         data = await self.wait_for_response("image_added", timeout=timeout)
-        return data["content_id"] if data else None
+        return data if data else None
 
     async def delete(self, content_id):
         await self.delete_list([content_id])
